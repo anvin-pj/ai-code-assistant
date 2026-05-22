@@ -1,0 +1,18 @@
+# Virtual Environments
+env/
+venv/
+ENV/
+
+# Databases & Credentials
+*.db
+*.sqlite3
+.env
+
+# Python Compiled junk
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Local operating system clutter
+.DS_Store
+Thumbs.db

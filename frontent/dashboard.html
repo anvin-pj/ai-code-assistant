@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Analytics Studio - Operations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>    
+<!--  Theme Restored: Matching the signature sunset gradient overlay perfectly -->
+<body class="bg-gradient-to-tr from-slate-900 via-rose-950 to-orange-950 font-sans antialiased min-h-screen pb-12">
+    
+    <!-- Top Glassmorphic Navigation Bar Layout -->
+    <nav class="bg-slate-950/40 backdrop-blur-md text-white shadow-xl px-8 py-5 flex justify-between items-center border-b border-white/10">
+        <div class="flex items-center space-x-3">
+            <span class="text-3xl">✨</span>
+            <div>
+                <h1 class="text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-orange-400">AI ANALYTICS STUDIO</h1>
+                <p class="text-[10px] text-orange-400/70 font-mono tracking-widest uppercase">Stateless Microservice Tier v3.0</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-6 bg-slate-900/60 px-4 py-2 rounded-xl border border-white/10">
+            <span id="userDisplay" class="text-amber-400 font-mono text-sm tracking-wide"></span>
+            <button onclick="logout()" class="bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white px-3 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase transition">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Core Grid Workspace Area -->
+    <div class="max-w-7xl mx-auto p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left Panel: Form Control Panel Box -->
+        <div class="space-y-6">
+            <div class="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-white/20">
+                <h3 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">📂 Data Input Ingestion</h3>
+                
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Load Excel Resource (.xlsx)</label>
+                        <input type="file" id="fileInput" accept=".xlsx" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 file:transition cursor-pointer">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Natural Language Workspace Query</label>
+                        <textarea id="questionInput" rows="4" class="w-full p-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 bg-slate-50/50 transition resize-none" placeholder="e.g., Show top 5 pizza choices by sales quantity."></textarea>
+                    </div>
+                    <button onclick="runQuery()" class="w-full bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-black py-3 rounded-xl shadow-lg text-xs uppercase tracking-wider transition transform active:scale-[0.99]">
+                        Execute Query Pipeline
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panels: Interactive Analytics Reporting Engine -->
+        <div class="lg:col-span-2 space-y-6">
+            
+            <!-- Code and Data Printout Console Section (Flips visible dynamically) -->
+            <div id="codeAndTextSection" class="hidden space-y-6">
+                <!-- Code Box Card Terminal -->
+                <div class="bg-slate-950/90 backdrop-blur-md rounded-2xl p-5 shadow-2xl border border-white/10 relative">
+                    <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
+                        <span class="text-xs text-emerald-400 font-mono tracking-wider uppercase">⚙️ Executed Pandas Code</span>
+                        <button onclick="copyCode()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-lg transition active:scale-95">Copy Script</button>
+                    </div>
+                    <pre class="overflow-x-auto text-sm text-slate-200 font-mono p-2 bg-slate-950/50 rounded-xl"><code id="codeDisplay"></code></pre>
+                </div>
+
+                <!-- Structured Text Table Matrix Output Box -->
+                <div class="bg-white/95 backdrop-blur-md rounded-2xl p-5 shadow-2xl border border-white/20">
+                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block mb-2">📝 Result Data Printout</span>
+                    <pre id="textPrintoutDisplay" class="overflow-x-auto font-mono text-xs text-slate-700 bg-slate-50 p-4 rounded-xl max-h-48 whitespace-pre"></pre>
+                </div>
+            </div>
+
+            <!-- Visual Chart Dashboard Component Panel -->
+            <div class="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-white/20 min-h-[400px] flex flex-col">
+                <h3 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">📊 Output Visualization Studio</h3>
+                
+                <!-- Resting Idle View Area -->
+                <div id="emptyState" class="flex-1 flex flex-col items-center justify-center text-slate-400 py-12">
+                    <span class="text-6xl mb-3 animate-pulse">📊</span>
+                    <p class="text-sm font-medium">Workspace idle. Feed dataset parameters to generate visual arrays.</p>
+                </div>
+
+                <!-- Live Canvas Chart Display Node -->
+                <div id="chartWrapper" class="relative w-full flex-1 min-h-[300px] hidden">
+                    <canvas id="analyticsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Gateway Script Engine -->
+    <script>
+        const token = localStorage.getItem('oauthToken');
+        if (!token) { window.location.href = 'index.html'; }
+        
+        document.getElementById('userDisplay').innerText = `👤 [ ${localStorage.getItem('username') || 'Active User'} ]`;
+        let chartInstance = null;
+
+        async function runQuery() {
+            const fileEl = document.getElementById('fileInput');
+            const questionEl = document.getElementById('questionInput');
+            const codeDisplay = document.getElementById('codeDisplay');
+            const textPrintoutDisplay = document.getElementById('textPrintoutDisplay');
+            const codeAndTextSection = document.getElementById('codeAndTextSection');
+            const chartWrapper = document.getElementById('chartWrapper');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (!fileEl.files[0] || !questionEl.value.trim()) {
+                alert("Data parameter fields are unpopulated.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileEl.files[0]);
+            formData.append("question", questionEl.value.trim());
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/query', { 
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData 
+                });
+                
+                const resData = await response.json();
+                if (!response.ok) throw new Error(resData.detail || "Server processing exception.");
+
+                codeAndTextSection.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+                
+                codeDisplay.innerText = resData.generated_code;
+                textPrintoutDisplay.innerText = resData.answer_text;
+
+                if (resData.is_chart_eligible) {
+                    chartWrapper.classList.remove('hidden');
+                    renderChart(resData.data);
+                } else {
+                    chartWrapper.classList.add('hidden');
+                    if (chartInstance) chartInstance.destroy();
+                }
+            } catch (err) {
+                alert("Pipeline Disrupted: " + err.message);
+            }
+        }
+
+        function renderChart(dataArray) {
+            const ctx = document.getElementById('analyticsChart').getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+
+            const keys = Object.keys(dataArray[0]);
+            const labels = dataArray.map(row => row[keys[0]]);
+            const values = dataArray.map(row => row[keys[1] || keys[0]]);
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Metrics Tracking Matrix',
+                        data: values,
+                        backgroundColor: '#F43F5E',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function copyCode() {
+            const codeText = document.getElementById('codeDisplay').innerText;
+            navigator.clipboard.writeText(codeText);
+            alert("Pandas script copied to clipboard!");
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
+--!>
