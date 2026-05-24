@@ -11,6 +11,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from jose import jwt, JWTError
 
+
 app = FastAPI(title="Stateless Compute Engine Microservice")
 
 app.add_middleware(
@@ -39,17 +40,45 @@ def verify_oauth2_token(token: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Session expired or invalid verification footprint.")
 
 # --- GenAI Groq Data Science Execution Chain Configuration Engine ---
-os.environ["GROQ_API_KEY"] =os.environ.get("GROQ_API_KEY", "YOUR_KEY")
-custom_client = httpx.Client(verify=False)
-llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0, http_client=custom_client)
+# TEMPORARY TEST: Hardcode the key to see if the 401 goes away
+# --- GenAI Groq Data Science Execution Chain Configuration Engine ---
 
+# 1. THE KEY: Paste your real key here. 
+# Ensure it starts with 'gsk_' and has no extra spaces.
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# 1. FIND THE PROJECT ROOT
+# This looks for the directory containing your .env file
+# Assuming your structure is: ai-project/.env and ai-project/compute_service/main.py
+base_dir = Path(__file__).resolve().parent.parent 
+env_path = base_dir / ".env"
+
+# 2. LOAD IT WITH OVERRIDE
+# 'override=True' ensures that if Windows cached an old key, the .env version wins
+if env_path.exists():
+    load_dotenv(dotenv_path=env_path, override=True)
+    print(f"✅ Environment loaded from: {env_path}")
+else:
+    print("⚠️ Warning: .env file not found at the root. Falling back to system env.")
+
+# 3. EXTRACT THE KEY
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
+# 4. INITIALIZE THE LLM
 custom_client = httpx.Client(verify=False)
 llm = ChatGroq(
-    model="llama-3.3-70b-versatile", 
+    groq_api_key=GROQ_API_KEY, 
+    model_name="llama-3.3-70b-versatile", 
     temperature=0, 
     http_client=custom_client
 )
 
+if not GROQ_API_KEY:
+    print("🔴 ERROR: GROQ_API_KEY is still missing. Check your .env file spelling!")
+else:
+    print("🟢 LLM initialized successfully from .env!")
 # 🛠️ UPGRADED PROMPT TEMPLATE: Forces clean code formatting and prevents clipped strings
 code_template = """You are an expert data scientist. You have a pandas DataFrame named 'df'.
 DataFrame Schema (column types): {schema}
