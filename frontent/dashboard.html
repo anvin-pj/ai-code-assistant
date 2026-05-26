@@ -115,7 +115,7 @@
             formData.append("question", questionEl.value.trim());
 
             try {
-                const response = await fetch('http://127.0.0.1:8000/query', { 
+                const response = await fetch('https://ai-code-assistant-1-k90l.onrender.com/query', { 
                     method: 'POST',
                     headers: { 'Authorization': `Bearer ${token}` },
                     body: formData 
