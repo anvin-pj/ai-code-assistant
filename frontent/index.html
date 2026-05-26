@@ -2,35 +2,175 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Pizza AI Analytics Portal - Access</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusData AI | Intelligence Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #060913;
+            --panel-bg: rgba(255, 255, 255, 0.03);
+            --accent-primary: #f43f5e; /* Rose */
+            --accent-secondary: #fb923c; /* Orange */
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            /* Signature Cosmic Sunset Background */
+            background-image: 
+                radial-gradient(circle at 80% 20%, rgba(244, 63, 94, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(251, 146, 60, 0.08) 0%, transparent 40%);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* 🧊 Glass Auth Card */
+        .auth-card {
+            background: var(--panel-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            animation: authFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes authFadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .brand-header h2 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .brand-header p {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            margin-top: 8px;
+            text-transform: uppercase;
+        }
+
+        /* 📡 Dynamic Alert Styles */
+        #alertMessage {
+            font-size: 0.75rem;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .error-alert { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.2); color: #fda4af; }
+        .warn-alert { background: rgba(251, 146, 60, 0.1); border: 1px solid rgba(251, 146, 60, 0.2); color: #fdba74; }
+
+        /* ⌨️ Tech-Themed Form */
+        .input-group { margin-bottom: 20px; }
+
+        .input-group label {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--accent-secondary);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 14px;
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 15px rgba(244, 63, 94, 0.2);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3);
+        }
+
+        .btn-login:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .footer a { color: var(--accent-primary); text-decoration: none; font-weight: bold; }
+    </style>
 </head>
-<body class="bg-gradient-to-tr from-slate-900 to-slate-800 min-h-screen flex items-center justify-center p-4">
-    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
-        <div class="text-center mb-8">
-            <span class="text-5xl">✨</span>
-            <h2 class="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-orange-500 mt-2">Welcome Back</h2>
-            <p class="text-gray-500 text-sm mt-1">Access your GenAI analytics control room</p>
+<body>
+
+    <div class="auth-card">
+        <div class="brand-header">
+            <h2>NexusData AI</h2>
+            <p>Intelligence Portal Access</p>
         </div>
-        
-        <div id="alertMessage" class="hidden text-sm p-3 rounded-lg font-semibold text-center mb-4"></div>
-        
-        <form id="loginForm" class="space-y-5">
-            <div>
-                <label class="block text-gray-700 text-xs font-bold uppercase tracking-wider mb-2">Username</label>
-                <input type="text" id="username" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400 transition" required placeholder="e.g., admin">
+
+        <div id="alertMessage"></div>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <label>IDENTIFIER_KEY (USERNAME)</label>
+                <input type="text" id="username" placeholder="e.g., admin" required>
             </div>
-            <div>
-                <label class="block text-gray-700 text-xs font-bold uppercase tracking-wider mb-2">Password</label>
-                <input type="password" id="password" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-400 transition" required placeholder="••••••••">
+
+            <div class="input-group">
+                <label>SECURITY_ENCRYPTION (PASSWORD)</label>
+                <input type="password" id="password" placeholder="••••••••" required>
             </div>
-            <button type="submit" class="w-full py-3 bg-gradient-to-r from-rose-500 to-orange-500 text-white font-bold rounded-xl shadow-lg hover:from-rose-600 hover:to-orange-600 transition">
-                Login
-            </button>
+
+            <button type="submit" class="btn-login" id="loginBtn">Initialize Session</button>
         </form>
-        
-        <div class="mt-6 text-center border-t border-gray-100 pt-4">
-            <p class="text-sm text-gray-500">New around here? <a href="signup.html" class="text-rose-500 font-bold hover:underline">Create an Account</a></p>
+
+        <div class="footer">
+            New Entity? <a href="signup.html">Create Account</a>
         </div>
     </div>
 
@@ -38,9 +178,14 @@
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const alertBox = document.getElementById('alertMessage');
-            alertBox.className = "hidden text-sm p-3 rounded-lg font-semibold text-center mb-4";
+            const loginBtn = document.getElementById('loginBtn');
+            
+            // UI Reset
+            alertBox.style.display = "none";
+            alertBox.className = "";
+            loginBtn.innerText = "VERIFYING ENCRYPTION...";
 
-            // OAuth2 expects standard Form parameters, not raw JSON strings
+            // ⚙️ OAUTH2 FORM LOGIC (MATCHES YOUR ORIGINAL CODE)
             const params = new URLSearchParams();
             params.append('username', document.getElementById('username').value);
             params.append('password', document.getElementById('password').value);
@@ -51,22 +196,25 @@
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: params
                 });
+                
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Set both standard local keys used by dashboard route guards
+                    // Standard keys for your dashboard guards
                     localStorage.setItem('oauthToken', data.access_token);
                     localStorage.setItem('username', document.getElementById('username').value);
                     window.location.href = 'dashboard.html';
                 } else {
                     alertBox.innerText = data.detail || "Authentication entry parameters rejected.";
-                    alertBox.classList.add('bg-red-50', 'text-red-600');
-                    alertBox.classList.remove('hidden');
+                    alertBox.classList.add('error-alert');
+                    alertBox.style.display = "block";
+                    loginBtn.innerText = "Initialize Session";
                 }
             } catch (err) {
-                alertBox.innerText = "Network link timed out. Make sure Auth microservice is on Port 8001.";
-                alertBox.classList.add('bg-amber-50', 'text-amber-700');
-                alertBox.classList.remove('hidden');
+                alertBox.innerText = "Network Link Failure: Auth microservice timed out.";
+                alertBox.classList.add('warn-alert');
+                alertBox.style.display = "block";
+                loginBtn.innerText = "Initialize Session";
             }
         });
     </script>
