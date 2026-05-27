@@ -32,3 +32,29 @@ NexusData AI is a smart analytics dashboard that lets you "talk" to your Excel d
 git clone [https://github.com/yourusername/nexusdata-ai.git](https://github.com/yourusername/nexusdata-ai.git)
 cd nexusdata-ai
 pip install -r requirements.txt
+```
+###2. Environment Configuration
+Create a .env file in the root directory and add your keys:
+
+Code snippet
+```bash
+GROQ_API_KEY=gsk_your_key_here
+SUPABASE_URL=supabase_url
+SUPABASE_ANON_KEY=your_super_secret_anon_key
+```
+###3. Install Dependencies
+```Bash
+pip install -r requirements.txt
+```
+###4. Start the Microservices
+Open two terminals and run the following:
+
+Terminal 1 (Auth Service):
+
+```Bash
+uvicorn auth_service.main:app --port 8001 --reload
+```
+Terminal 2 (Compute Engine):
+```Bash
+uvicorn compute_service.main:app --port 8002 --reload
+```
